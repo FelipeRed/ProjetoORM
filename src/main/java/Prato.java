@@ -63,7 +63,7 @@ public class Prato {
         System.out.println("---------------------------------");
     }
 
-    public void atualizarPratoNoBanco() {
+    public void atualizar() {
         Main.limparTela();
         int op = 0;
         while (op < 1 || op > 3) {
@@ -90,7 +90,7 @@ public class Prato {
         Main.inputString("Prato editado com sucesso!");
     }
 
-    public void apagarPratoDoBanco() {
+    public void apagar() {
         Main.limparTela();
         System.out.println("PRATO A SER EXCLUÍDO:");
         this.print();
@@ -114,9 +114,11 @@ public class Prato {
     public void salvar() {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("unidadePU");
         EntityManager em = emf.createEntityManager();
+
         em.getTransaction().begin();
         em.persist(this);
         em.getTransaction().commit();
+
         em.close();
         emf.close();
         Main.inputString("Prato criado no banco com sucesso!\nPressione ENTER para continuar.");
