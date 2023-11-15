@@ -51,12 +51,12 @@ public class Garcom {
         while (op < 1 || op > 2) {
             op = Main.inputInt("" +
                     "\n1- Editar nome do Garcom           ->  ATUAL: " + this.nome +
-                    "\n2- Editar salario do Garcom          ->  ATUAL: " + this.salario +
+                    "\n2- Editar salario do Garcom        ->  ATUAL: " + this.salario +
                     "\nInsira a opção desejada: ");
 
             switch (op) {
                 case 1 -> this.setNome(Main.inputString("Insira o novo nome do garcom: "));
-                case 2 -> this.setSalario(Main.inputInt("Insira o novo preço do garcom: "));
+                case 2 -> this.setSalario(Main.inputInt("Insira o novo salário do garcom: "));
                 default -> System.out.println("Opção inválida...");
             }
         }

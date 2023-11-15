@@ -87,7 +87,7 @@ public class Prato {
         em.getTransaction().commit();
         em.close();
         emf.close();
-        Main.inputString("Prato editado com sucesso!");
+        Main.inputString("Prato editado com sucesso!\nPressione ENTER para continuar.");
     }
 
     public void apagar() {

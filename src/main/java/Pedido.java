@@ -22,6 +22,25 @@ public class Pedido {
     public Prato getPrato() {
         return prato;
     }
+    public void setPrato(Prato prato) { this.prato = prato;}
+
+    public void atualizar(){
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("unidadePU");
+        EntityManager em = emf.createEntityManager();
+
+        Main.verCardapio();
+        Prato prato = Main.selecionarPratoPeloId("encontrar");
+        this.setPrato(prato);
+
+        em.getTransaction().begin();
+        em.merge(this);
+        em.getTransaction().commit();
+
+        em.close();
+        emf.close();
+
+        Main.inputString("Pedido alterado no banco com sucesso!\nPressione ENTER para continuar.");
+    }
 
     public void apagar() {
         Main.limparTela();
@@ -59,6 +78,6 @@ public class Pedido {
 
     public void print() {
         System.out.println("ID: " + id);
-        System.out.println("Pedido: " + prato.getNome() + " R$ " + prato.getPreco());
+        System.out.println("Pedido: " + prato.getNome() + " R$ " + prato.getPreco() + "\n");
     }
 }

@@ -8,8 +8,8 @@
         <properties>
             <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
             <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost/projeto_orm?serverTimezone=UTC"/>
-            <property name="jakarta.persistence.jdbc.user" value="felipered"/>
-            <property name="jakarta.persistence.jdbc.password" value="fe@@2013"/>
+            <property name="jakarta.persistence.jdbc.user" value="usuarioaqui"/>
+            <property name="jakarta.persistence.jdbc.password" value="senhaaqui"/>
 
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect" />
             <property name="hibernate.show_sql" value="true" />

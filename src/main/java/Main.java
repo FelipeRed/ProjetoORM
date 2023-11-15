@@ -14,24 +14,24 @@ public class Main {
             switch (acao) {
                 case 1 -> ocuparMesa();
                 case 2 -> fazerPedido();
-                case 3 -> cancelarPedido();
-                case 4 -> fecharMesa();
-                case 5 -> verCardapio();
-                case 6 -> criarGarcom();
-                case 7 -> editarGarcom();
-                case 8 -> deletarGarcom();
-                case 9 -> criarMesa();
-                case 10 -> mudarGarcomMesa();
-                case 11 -> deletarMesa();
-                case 12 -> criarPrato();
-                case 13 -> editarPrato();
-                case 14 -> deletarPrato();
+                case 3 -> editarPedido();
+                case 4 -> cancelarPedido();
+                case 5 -> fecharMesa();
+                case 6 -> verCardapio();
+                case 7 -> criarGarcom();
+                case 8 -> editarGarcom();
+                case 9 -> deletarGarcom();
+                case 10 -> criarMesa();
+                case 11 -> mudarGarcomMesa();
+                case 12 -> deletarMesa();
+                case 13 -> criarPrato();
+                case 14 -> editarPrato();
+                case 15 -> deletarPrato();
                 case 0 -> System.out.println("Volte sempre!");
                 default -> System.out.println("Insira uma opção válida.");
             }
         }
     }
-
 
 
     /* =-=-=-=-=-=-=-=-=-=-=-= SELECT'S =-=-=-=-=-=-=-=-=-=-=-= */
@@ -104,11 +104,12 @@ public class Main {
             for (Mesa m : listaMesas) {
                 System.out.println("- Mesa " + m.getNumMesa());
             }
-            em.close();
-            emf.close();
 
             Long idMesa = inputLong("Insira o número da mesa que deseja selecionar: ");
-            return em.find(Mesa.class, idMesa);
+            Mesa mesa = em.find(Mesa.class, idMesa);
+            em.close();
+            emf.close();
+            return mesa;
         }
         return null;
     }
@@ -130,8 +131,8 @@ public class Main {
             EntityManagerFactory emf = Persistence.createEntityManagerFactory("unidadePU");
             EntityManager em = emf.createEntityManager();
 
-            Query query = em.createQuery("SELECT p FROM Pedido p WHERE p.mesa_id = :numMesa");
-            query.setParameter("numMesa", mesa.getNumMesa());
+            Query query = em.createQuery("SELECT p FROM Pedido p WHERE p.mesa = :mesa");
+            query.setParameter("mesa", mesa);
 
             List<Pedido> pedidos = query.getResultList();
 
@@ -153,7 +154,7 @@ public class Main {
             emf.close();
             return pedido;
         }
-        inputString("Mesa não encontrada. Pressione ENTER para continuar.");
+        inputString("Mesa não encontrada. \nPressione ENTER para continuar.");
         return null;
     }
 
@@ -168,25 +169,26 @@ public class Main {
         limparTela();
         System.out.println("""
                 ---/--- USO NORMAL ---/---
-                1  - Ocupar mesa;
-                2  - Fazer um pedido;
-                3  - Cancelar um pedido;
-                4  - Fechar mesa;
-                5  - Ver cardápio;
+                 1 - Ocupar mesa;
+                 2 - Fazer um pedido;
+                 3 - Editar um pedido;
+                 4 - Cancelar um pedido;
+                 5 - Fechar mesa;
+                 6 - Ver cardápio;
 
                 """);
 
         System.out.println("""
                 ---/--- USO DE ADMIN ---/---
-                 6 - Adicionar Garçom;
-                 7 - Atualizar Garçom;
-                 8 - Apagar Gaçom;
-                 9 - Adicionar Mesa;
-                10 - Atualizar Mesa;
-                11 - Apagar Mesa;
-                12 - Adicionar Prato
-                13 - Atualizar Prato;
-                14 - Apagar Prato;
+                 7 - Adicionar Garçom;
+                 8 - Atualizar Garçom;
+                 9 - Apagar Gaçom;
+                10 - Adicionar Mesa;
+                11 - Atualizar Mesa;
+                12 - Apagar Mesa;
+                13 - Adicionar Prato
+                14 - Atualizar Prato;
+                15 - Apagar Prato;
 
                  0 - Para sair""");
 
@@ -240,10 +242,20 @@ public class Main {
         em.close();
         emf.close();
     }
+    public static void editarPedido(){
+        Pedido pedido = selecionarPedidoPeloId("editar");
+        if (pedido != null) {
+            pedido.atualizar();
+        }
+        else {
+            limparTela();
+            inputString("Pedido não encontrado.\nPressione ENTER para continuar");
+        }
+    }
     public static void cancelarPedido() {
         Pedido pedido = selecionarPedidoPeloId("cancelar");
         if (pedido != null) pedido.apagar();
-        else inputString("Pedido não encontrada.");
+        else inputString("Pedido não encontrada. \nPressione ENTER para continuar.");
     }
 
 
@@ -268,7 +280,8 @@ public class Main {
 
         if (mesa != null) {
             verGarcons();
-            System.out.println("Garçom atual responsável por essa mesa: " + mesa.getGarcom().getNome());
+            if(mesa.getGarcom() != null) System.out.println("Garçom atual responsável por essa mesa: " + mesa.getGarcom().getNome());
+            else System.out.println("Não há garçons na mesa atual!");
             String id = inputString("Insira o ID do garcom que deseja alocar nesta mesa: ");
             Garcom garcom = selecionarGarcomPeloId(id);
 
@@ -319,7 +332,7 @@ public class Main {
             limparTela();
             inputString("Mesa fechada com sucesso!\n" +
                     "VALOR TOTAL DOS PEDIDOS: R$" + total +
-                    "Pressione ENTER para continuar.");
+                    "\nPressione ENTER para continuar.");
         }
         else {
             inputString("Mesa não encontrada.");
